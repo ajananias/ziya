@@ -1,5 +1,5 @@
 import mingus.core.chords as chords
-import mingus.core.keys as keys
+import mingus.core.progressions as progressions
 
 class Progression:
 
@@ -58,15 +58,26 @@ class Progression:
     def __init__(self, key: str, chords: list=[]):
         self.key = key
         self.chords = chords
-        print(f"Key manually set to {key}.")
+        self.moods = []
+        print(f"\nKey set to {key}.")
 
-        
     def add_chord(self, chord: str):
         try:
             chords.from_shorthand(chord)
         except Exception:
             return f"Invalid chord name: {chord}"
         self.chords.append(chord)
+
+        if len(self.chords) >= 2:
+            prev = self.chords[-2]
+            curr = self.chords[-1]
+            prev_numeral = self.get_numeral(prev)
+            curr_numeral = self.get_numeral(curr)
+            if prev_numeral and curr_numeral:
+                mood = self.interval_effects.get((prev_numeral, curr_numeral), "Unknown")
+                self.moods.append((f"{prev_numeral}-{curr_numeral}", mood))
+            else:
+                self.moods.append(("Non-diatonic", "Unknown"))
         return True
 
     def get_current_chord_progression(self):
@@ -78,9 +89,9 @@ class Progression:
         natural_triads = ""
         numeral_function = [chords.I, chords.II, chords.III, chords.IV, chords.V, chords.VI, chords.VII]
         
-        natural_triads = f"\n{self.key} I-VII natural triads:\n"
+        natural_triads = f"\nI-VII natural triads in the key of {self.key}:"
         for i in range(7):
-            natural_triads += f"{chords.determine(numeral_function[i](self.key), True, True)}: {numeral_function[i](self.key)},\n"
+            natural_triads += f"{chords.determine(numeral_function[i](self.key), True, True)}: {numeral_function[i](self.key)}\n"
 
         return natural_triads
     
@@ -95,7 +106,7 @@ class Progression:
                 last_numeral = numerals[i]
                 break
         if last_numeral is None:
-            print("No matching chord found in the key.")
+            print("Caution: the added chord doesn't belong to the diatonic harmonic scale of the key.")
             return
         for i in range(7):
             current_numeral = numerals[i]
@@ -103,4 +114,35 @@ class Progression:
                 continue
             target_chord = chords.determine(numeral_function[i](self.key), True, True)
             feel = self.interval_effects.get((last_numeral, current_numeral), "Unknown")
-            print(f"{last_numeral} -> {current_numeral} | {target_chord} | Feel: {feel}")
+            print(f"{last_numeral} -> {current_numeral} | {target_chord} | {feel}")
+        
+    def get_numerical_progression(self):
+        numerical_progression = []
+        for chord in self.chords:
+            chord_triad = chords.from_shorthand(chord, True)
+            numerical_progression.append(chord_triad)
+        return progressions.determine(numerical_progression, self.key, True), progressions.determine(numerical_progression, self.key)
+    
+    def get_numeral(self, chord):
+        numerals = ["I", "II", "III", "IV", "V", "VI", "VII"]
+        numeral_function = [chords.I, chords.II, chords.III, chords.IV, chords.V, chords.VI, chords.VII]
+        for i in range(7):
+            determined = chords.determine(numeral_function[i](self.key), True, True)
+            if chords.from_shorthand(chord) in chords.from_shorthand(determined):
+                return numerals[i]  # ← already a string
+        return None
+
+    def get_emotional_arc(self):
+        output = "\nEmotional progression:\n"
+        for step, mood in self.moods:
+            output += f"{step}: {mood}\n"
+        return output
+    
+    def save_progression(self, filepath="saved_progressions.txt"):
+        # Format: [key, progression]
+        entry = [self.key, self.chords]
+        with open(filepath, "a") as file:
+            file.write(str(entry) + "\n")
+        print(f"Progression saved to '{filepath}'")
+
+

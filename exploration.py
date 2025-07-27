@@ -21,6 +21,8 @@ cmaj7=chords.from_shorthand("Cmaj7")
 print("Cmaj7 notes:", cmaj7)
 print("CHORD NAMING ", chords.determine_triad(['A', 'C', 'E'], True))
 print(chords.determine(['A', 'C', 'E'], True))
+print(chords.determine(chords.IV('C'), True))
+
 
 import mingus.core.scales as scales
 
