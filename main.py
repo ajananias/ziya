@@ -1,8 +1,4 @@
-import mingus.core.chords as chords
 import mingus.core.notes as notes
-import mingus.core.keys as keys
-import mingus.core.scales as scales
-import mingus.core.progressions as progressions
 from progression import Progression
 
 def main():
@@ -43,6 +39,9 @@ def main():
             select_key = f">>> Select key: "
             print("First, select a key for your chord progression.")
             current_key = input(select_key)
+            if current_key == "":
+                print("No key selected")
+                continue
             if notes.is_valid_note(current_key):
                 prog = Progression(current_key)
                 print("\nEnter chords (for example: C, Dm, Gmaj7). Type 'done' when finished.\n")
@@ -70,7 +69,7 @@ def main():
             print("-" * 25)
             print("Progression (Chords):", prog.chords)
             print("Key:", prog.key)
-            print(f"\nNumerical Progression: {prog.get_numerical_progression()[0]}")
+            print(f"\nCadence: {prog.get_cadence()[0]}")
             print(prog.get_emotional_arc())
 
         while True:
@@ -86,11 +85,16 @@ def main():
             
             break
 
-
-
     # Progression Analyzer
     if prog_analyzer_active:
-        print("Chord Progression Analyzer")
+        prog = Progression()
+        prog.select_progression()
+        if not prog.chords:
+            print("No progression was selected")
+        
+        
+        
+
 
 if __name__ == "__main__":
     main()

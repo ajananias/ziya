@@ -1,10 +1,11 @@
 import mingus.core.chords as chords
 import mingus.core.progressions as progressions
-
+import ast
 class Progression:
 
     interval_effects = {
     
+    ('I', 'I'): "Same chord, no mood change",
     ('I', 'II'): "Resignation",
     ('I', 'III'): "Loneliness",
     ('I', 'IV'): "Exploration, warmth",
@@ -13,6 +14,7 @@ class Progression:
     ('I', 'VII'): "Destabilization",
     
     ('II', 'I'): "Clouded peace",
+    ('II', 'II'): "Same chord, no mood change",
     ('II', 'III'): "Heightened dramatic intensity",
     ('II', 'IV'): "Help, sweetness, magnificence",
     ('II', 'V'): "Happy clarification",
@@ -21,6 +23,7 @@ class Progression:
 
     ('III', 'I'): "Soft return",
     ('III', 'II'): "Faltering",
+    ('III', 'III'): "Same chord, no mood change",
     ('III', 'IV'): "Overcoming, solace",
     ('III', 'V'): "Strength, happy surprise",
     ('III', 'VI'): "Sad resolution, acceptance",
@@ -29,6 +32,7 @@ class Progression:
     ('IV', 'I'): "Bright peace",
     ('IV', 'II'): "Darkening",
     ('IV', 'III'): "Loss, fragility",
+    ('IV', 'IV'): "Same chord, no mood change",
     ('IV', 'V'): "Heightened joy",
     ('IV', 'VI'): "Hardship",
     ('IV', 'VII'): "Drama, tension, alarm",
@@ -37,6 +41,7 @@ class Progression:
     ('V', 'II'): "Setback",
     ('V', 'III'): "Bad news, left hanging",
     ('V', 'IV'): "Calm",
+    ('V', 'V'): "Same chord, no mood change",
     ('V', 'VI'): "Disappointment",
     ('V', 'VII'): "Thickening, added tension",
     
@@ -45,6 +50,7 @@ class Progression:
     ('VI', 'III'): "Gravitas, epicness",
     ('VI', 'IV'): "Redemption, support",
     ('VI', 'V'): "Positive transformation",
+    ('VI', 'VI'): "Same chord, no mood change",
     ('VI', 'VII'): "Pain, confusion",
     
     ('VII', 'I'): "Bright resolution",
@@ -52,20 +58,24 @@ class Progression:
     ('VII', 'III'): "Despair, anger",
     ('VII', 'IV'): "Mystery, magic",
     ('VII', 'V'): "Release",
-    ('VII', 'VI'): "Dark resolution"
+    ('VII', 'VI'): "Dark resolution",
+    ('VII', 'VII'): "Same chord, no mood change"
 }
 
-    def __init__(self, key: str, chords: list=[]):
+    def __init__(self, key: str = None, chords: list=[]):
         self.key = key
         self.chords = chords
         self.moods = []
+        if key is None:
+            return
         print(f"\nKey set to {key}.")
 
     def add_chord(self, chord: str):
         try:
             chords.from_shorthand(chord)
         except Exception:
-            return f"Invalid chord name: {chord}"
+            print(f"Invalid chord name: {chord}")
+            return False
         self.chords.append(chord)
 
         if len(self.chords) >= 2:
@@ -116,12 +126,12 @@ class Progression:
             feel = self.interval_effects.get((last_numeral, current_numeral), "Unknown")
             print(f"{last_numeral} -> {current_numeral} | {target_chord} | {feel}")
         
-    def get_numerical_progression(self):
-        numerical_progression = []
+    def get_cadence(self):
+        cadence = []
         for chord in self.chords:
             chord_triad = chords.from_shorthand(chord, True)
-            numerical_progression.append(chord_triad)
-        return progressions.determine(numerical_progression, self.key, True), progressions.determine(numerical_progression, self.key)
+            cadence.append(chord_triad)
+        return progressions.determine(cadence, self.key, True), progressions.determine(cadence, self.key)
     
     def get_numeral(self, chord):
         numerals = ["I", "II", "III", "IV", "V", "VI", "VII"]
@@ -129,8 +139,8 @@ class Progression:
         for i in range(7):
             determined = chords.determine(numeral_function[i](self.key), True, True)
             if chords.from_shorthand(chord) in chords.from_shorthand(determined):
-                return numerals[i]  # ← already a string
-        return None
+                return numerals[i]
+        return
 
     def get_emotional_arc(self):
         output = "\nEmotional progression:\n"
@@ -145,4 +155,35 @@ class Progression:
             file.write(str(entry) + "\n")
         print(f"Progression saved to '{filepath}'")
 
+    def retrieve_progression(self, chord_progression):
+        if not chord_progression or len(chord_progression) != 2:
+            print("Invalid progression format. Expected [key, [chords]]")
+            return
+        self.key = chord_progression[0]
+        self.chords = chord_progression[1]
+        print(f"Active Progression:\n{self.chords}\nKey: {self.key}")
+    
+    def select_progression(self, filepath = "saved_progressions.txt"):
+        try:
+            with open(filepath) as file:
+                lines = file.readlines()
+                progs = [ast.literal_eval(line.strip()) for line in lines]
+        except FileNotFoundError:
+            print(f"File '{filepath}' not found")
+            return
+        if not progs:
+            print("No saved progressions found")
+            return
+        for i, progression in enumerate(progs):
+            key, chords = progression
+            print(f"{i + 1}. Key: {key}     Progression: {chords}")
+            while True:
+                choice = input("Select this progression? (y/n): ").strip().lower()
+                if choice not in ["y", "n"]:
+                    print("Invalid input. Please choose 'y' or 'n'.")
+                    continue
+                if choice == "y":
+                    self.retrieve_progression(progression)
+                    return
+                break
 
