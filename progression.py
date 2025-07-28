@@ -99,7 +99,7 @@ class Progression:
         natural_triads = ""
         numeral_function = [chords.I, chords.II, chords.III, chords.IV, chords.V, chords.VI, chords.VII]
         
-        natural_triads = f"\nI-VII natural triads in the key of {self.key}:"
+        natural_triads = f"\nI-VII natural triads in the key of {self.key} in format [Chord]:[Triad]:\n"
         for i in range(7):
             natural_triads += f"{chords.determine(numeral_function[i](self.key), True, True)}: {numeral_function[i](self.key)}\n"
 
@@ -160,6 +160,8 @@ class Progression:
             print("Invalid progression format. Expected [key, [chords]]")
             return
         self.key = chord_progression[0]
+        for chord in chord_progression[1]:
+            self.add_chord(chord)
         self.chords = chord_progression[1]
         print(f"Active Progression:\n{self.chords}\nKey: {self.key}")
     
@@ -186,4 +188,17 @@ class Progression:
                     self.retrieve_progression(progression)
                     return
                 break
+
+    def general_report(self):
+        numerical_cadence = self.get_cadence()[0]
+        chord_descriptions = self.get_cadence()[1]
+        
+        print("-" * 25)
+        print("General Report")
+        print("-" * 25)
+        print(f"Key: {self.key}")
+        print(f"Progression: {self.chords}\n")
+        print(f"Cadence: {numerical_cadence}\n")
+        print(f"Chord functions: {chord_descriptions}")
+        print(self.get_emotional_arc())
 

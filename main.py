@@ -10,7 +10,7 @@ def main():
     prog_analyzer_active = False    
     # Selector for mode
     while True:
-        message = "Choose Mode: \n1. Chord Progression Builder\n2. Chord Progression Analyzer [SOON]\n3. Exit\n>>> "
+        message = "Choose Mode: \n1. Chord Progression Builder\n2. Chord Progression Analyzer - In development\n3. Exit\n>>> "
         mode = input(message)
         if mode not in ["1", "2", "3"]:
             print("Invalid option. Please choose 1, 2, or 3.")
@@ -90,10 +90,20 @@ def main():
         prog = Progression()
         prog.select_progression()
         if not prog.chords:
-            print("No progression was selected")
-        
-        
-        
+            print("No progression was selected. Exiting Progression Analyzer")
+            return
+        while True:
+            msg = "Select report: \n1. General Report\n2. Scale Comparison - In development \n3. Exit\n>>> "
+            report = input(msg)
+            if report not in ["1", "2", "3"]:
+                print("Invalid option. Please choose 1, 2, or 3.")
+                continue
+            if report == "1":
+                print("Please select a progression.")
+                prog.general_report()
+                break
+            else:
+                return
 
 
 if __name__ == "__main__":
