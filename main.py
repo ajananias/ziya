@@ -28,6 +28,7 @@ def main():
             print("Chord Progression Analyzer")
             print("-" * 50)
             print("You can now analyze your saved progressions.")
+            print("Please select a progression.")
             break
         if mode == "3":
             print("Exiting the program.")
@@ -99,9 +100,8 @@ def main():
                 print("Invalid option. Please choose 1, 2, or 3.")
                 continue
             if report == "1":
-                print("Please select a progression.")
                 prog.general_report()
-                break
+                return
             else:
                 return
 
