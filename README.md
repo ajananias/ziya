@@ -1,4 +1,4 @@
-# Ziya - The Music Theory Assistant (hackathon_chord_prog)
+# Ziya - The Music Theory Assistant
 
 This is **Ziya**, a console program that harnesses the power of Music Theory and allows the creation of harmonic chord progressions, guiding user choices based on how chord changes feel, suggesting not only harmonic coherence, but also evidence of the emotional roadmap hidden behind the sound. The main tools given by this program are the Chord Progression Builder and the Progression Analyzer. 
 
