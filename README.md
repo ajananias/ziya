@@ -2,24 +2,24 @@
 
 This is **Ziya**, a console program that harnesses the power of Music Theory and allows the creation of harmonic chord progressions, guiding user choices based on how chord changes feel, suggesting not only harmonic coherence, but also evidence of the emotional roadmap hidden behind the sound. The main tools given by this program are the Chord Progression Builder and the Progression Analyzer. 
 
-<img src="ziya_welcome.png" style="width:400px;"/>
+<img src="img/ziya_welcome.png" style="width:400px;"/>
 
 Created for [Boot.dev](http://boot.dev) 2025 Hackathon.
 
 ### Chord Progression Builder
 This tool lets you pick a key and then add as many chords as you want, and after you're done, it outputs your chord progression and the emotional feels associated with it. 
 
-<img src="ziya_cpb_example.png" alt="Example of Progression Builder" style="width:400px;"/>
+<img src="img/ziya_cpb_example.png" alt="Example of Progression Builder" style="width:400px;"/>
 
 ### Progression Analyzer (In development)
 The Progression Analyzer can access the file that contains the saved progressions created by the **Chord Progression Builder**. For now it's only able to generate a General Report that contains the progression, its cadence, chord functions and the emotional arc (which also appears in the CPB). The idea is to incorporate more types of reports, to access useful and interesting information. 
 
-<img src="ziya_analyzer_report.png" alt="Analyzer Report" style="width:800px;"/>
+<img src="img/ziya_analyzer_report.png" alt="Analyzer Report" style="width:800px;"/>
 
 ## Tonal Map of Chord Sequences
 The emotional significance of each chord interaction was defined thanks to the work of Pur Pasteur, shown in the following diagram: 
 
-![Tonal_Map_of_Chord_Sequences](image.png)
+![Tonal_Map_of_Chord_Sequences](img/image.png)
 
 This diagram was obtained from Pasteur's youtube video: ["Which Chord Sequences Produce Which Emotions (A Complete Map Of The Tonal System)"](https://www.youtube.com/watch?v=n6MViTAfNio)
 
