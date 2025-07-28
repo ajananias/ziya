@@ -3,7 +3,7 @@ from progression import Progression
 
 def main():
     print("-" * 50)
-    print("Welcome to the Music Theory Assistant")
+    print("Welcome to Ziya, The Music Theory Assistant")
     print("-" * 50)
            
     prog_builder_active = False
